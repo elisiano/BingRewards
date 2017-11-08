@@ -21,17 +21,28 @@ Windows
 > cd path\to\bingrewards
 > python main.py
 ```
+Docker
+
+A Dockerfile is included in this repository. You can build your local version as follows:
+```
+docker build -t bingrewards .
+```
+Once that's built you can run it as follows (make sure you adjust the path to your `config.xml`)
+```
+docker run -it --rm -v `pwd`/config.xml:/usr/src/app/config.xml bingrewards
+```
+
 ## Config
 
 ### General
 betweenQueriesInterval: Number of seconds between queries  
 betweenQueriesSalt: Random number of seconds added between queries  
-betweenAccountsInterval Number of seconds between accounts  
-betweenAccountsSalt Random number of seconds added between accounds  
-addSearchesDesktop Number of extra desktop searches  
-addSearchesDesktopSalt Random number of added desktop searches  
-addSearchesMobile Number of extra mobile searches  
-addSearchesMobileSalt Random number of added mobile searches  
+betweenAccountsInterval: Number of seconds between accounts  
+betweenAccountsSalt: Random number of seconds added between accounts  
+addSearchesDesktop: Number of extra desktop searches  
+addSearchesDesktopSalt: Random number of added desktop searches  
+addSearchesMobile: Number of extra mobile searches  
+addSearchesMobileSalt: Random number of added mobile searches  
 
 ### Accounts
 You can have as many account tags as you need.  
@@ -47,9 +58,9 @@ You can have as many account tags as you need.
 ```
 
 ### Query Generators
-- bing
-- googleTrends
-- wikipedia
+- **bing**: Uses today's bing news page. Generates terms which may be partial words.
+- **googleTrends**: Uses today's google trends, and google suggested searches. This generator generates whole words, generally consistent with a search syntax. These terms are anything trending and can be NSFW or terms for illegal items.
+- **wikipedia**: Uses today's wikipedia. Generates terms with whole words.
 
 ### Events
 onError: Defines what the script should do when an error occurs durring processing an account.  
@@ -59,9 +70,9 @@ onScriptFailure: A special event which occurs only once and if the script fails 
 
 ## Automating
 Linux/Mac: Create cron job  
-Replace `LOCAL_CONFIG_DIR` setting with the path to your Bing Rewards folder  
-You will also need to update the paths in the command to point to your Bing Rewards folder
-The below cronjob will run at 1 am + random(120 minutes)
+Replace `LOCAL_CONFIG_DIR` setting with the path to your Bing Rewards folder.  
+You will also need to update the paths in the command to point to your Bing Rewards folder.
+The below cronjob will run at 1 am + random(120 minutes).
 It will save the console output to to a log file
 ```bash
 SHELL=/bin/bash
@@ -71,16 +82,6 @@ LOCAL_CONFIG_DIR=/home/bingrewards/etc
 0   1   *   *   *   sleep $(($RANDOM \% 120))m && python2 /home/bingrewards/bin/main.py 2>&1 | gzip > /home/bingrewards/var/log/bingrewards/`date "+\%Y-\%m-\%dT\%H:\%M:\%S"`.log.gz
 ```
 Windows: Use build in Task Scheduler
-
-## Docker
-A Dockerfile is included in this repository. You can build your local version as follows:
-```
-docker build -t bingrewards .
-```
-Once that's built you can run it as follows (make sure you adjust the path to your `config.xml`)
-```
-docker run -it --rm -v /path/to/config.xml:/usr/src/app/config.xml bingrewards
-```
 
 ## References
 - For more information, including how to use this, please, take a look at my blog post:
